@@ -24,3 +24,6 @@ this is just a signal wrapper so that the I2C controller can be integrated into 
 ### A small note 
 Finally, the design uses FPGA I/O pin’s tristate buffer to accommodate the open-drain structure of the I C bus. The HDL code for the scl port, in which the signal flows out of the device, is assign scl = (scl_out_reg) ? 1’bz : 1’b0; In this scheme, the FPGA device turns off the tristate buffer (i.e., changes the output to a high-impedance state) when a desired bus line level is 1. Since the bus line is connected to VDD via a pull-up resistor, it is driven to 1 implicitly when all devices output 1 (i.e., all are in high-impedance state). Note that the scl port uses the tri data type because of the tristate buffer. The HDL code for the sda port is assign sda = (input_en || sda_out) ? 1’bz : 1’b0; The first condition, input_en=’1’, is to turn off the tristate buffer for the slave device to transmit data and the second condition, sda_out=’1’, is to generate an output of 1 via the implicit pull-up resistor circuit. As with the scl port, the tri data type is used because of the tristate buffer.
 
+### Refrences 
+- Pong P. Chu's FPGA Prototyping by SystemVerilog Examples: Xilinx MicroBlaze MCS SoC Edition
+- Texas insturments application report SLVA704 "Understanding the I2C Bus"
